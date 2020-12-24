@@ -4,6 +4,9 @@ const cors = require('cors');
 const app = express();
 const knex = require('knex');
 
+const register = require('./controllers/register');
+const signin = require('./controllers/signin');
+
 const db = knex({
   client: 'pg',
   connection: {
@@ -20,58 +23,11 @@ const db = knex({
 app.use(express.json());
 app.use(cors());
 
-app.post('/signin', (req, res) => {
-  // console.log('signin', email, name, password);
-  db.select('email', 'hash').from('login')
-    .where('email', '=', req.body.email)
-    .then(data => {
-      // console.log(data);
-      const isValid = bcrypt.compareSync(req.body.password, data[0].hash); 
-      if (isValid) {
-        return db.select('*').from('users')
-        .where('email','=', req.body.email)
-        .then(user => {
-          res.json(user[0])
-        })
-        .catch(err => res.status(400).json('unable to get user', isValid))
-      } else {
-        res.status(400).json('login info not correct')
-      }
-  })
-    .catch(err => res.status(400).json('wrong credentials'))
+// app.get('/', (req, res => { res.send('It is working!') })
 
-})
+app.post('/signin', (req, res) => {signin.handlesignin(req, res, db, bcrypt)})
 
-app.post('/register', (req, res) => {
-  const { email, name, password } = req.body;
-  console.log(email, name, password);
-  const hash = bcrypt.hashSync(password);
-  db.transaction(trx => {
-    trx.insert({
-      hash: hash,
-      email: email
-    })
-    .into('login')
-    .returning('email')
-    .then(loginEmail => {
-      return trx('users')
-      .returning('*')
-      .insert({
-      email: loginEmail[0],
-      name: name,
-      joined: new Date()
-    })
-      .then(user => {
-      res.json(user[0]);
-    })
-  })
-  .then(trx.commit) 
-  .then(console.log('commit'))
-  .catch(trx.rollback)
-  // console.log('rollback')
-}) 
-    .catch(err => res.status(400).json('unable to register'))
-})
+app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt)})
 
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
