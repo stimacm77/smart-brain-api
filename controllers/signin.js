@@ -1,4 +1,4 @@
-const handleRegister = (req, res, db, bcrypt) => {
+const handleSignin = (req, res, db, bcrypt) => {
   // console.log('signin', email, name, password);
   db.select('email', 'hash').from('login')
     .where('email', '=', req.body.email)
@@ -20,5 +20,5 @@ const handleRegister = (req, res, db, bcrypt) => {
 }
 
 module.exports = {
-  handlesignin: handleRegister
+  handleSignin: handleSignin
 };

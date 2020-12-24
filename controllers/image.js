@@ -1,4 +1,4 @@
-const handleImage = (req, res, db, bcrypt) => {
+const handleImage = (req, res, db) => {
   const { id } = req.body;
  db('entries').where('id', '=', id)
   .increment('entries', 1)
