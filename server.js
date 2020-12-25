@@ -25,9 +25,9 @@ const db = knex({
 app.use(express.json());
 app.use(cors());
 
-// app.get('/', (req, res => { res.send('It is working!') })
+app.get('/', (req, res) => { res.send('it is working!') })
 
-app.post('/signin', (req, res) => {signin.handlesignin(req, res, db, bcrypt)})
+app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt)})
 
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt)})
 
@@ -49,8 +49,8 @@ app.put('/image', (req, res) => { profile.handleprofileGet(req, res, db)})
 // });
 
 
-app.listen(3000, ()=> { 
-  console.log('app is running on port 3000');
+app.listen(process.env.PORT || 3000, ()=> { 
+  console.log(`app is running on ${process.env.PORT}`);
 })
 
 /*
