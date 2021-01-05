@@ -9,6 +9,8 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
+process.env.NOD_TLS_REJECT_UNAUTHORIZED = 0; 		
+
 const db = knex({
   client: 'pg',
   connection: {
@@ -31,7 +33,7 @@ app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcry
 
 app.get('/profile/:id', (req, res) => { profile.handleprofileGet(req, res, db)})
 
-app.put('/image', (req, res) => { profile.handleprofileGet(req, res, db)})
+app.put('/image', (req, res) => { profile.handleImage(req, res, db)})
 
 // bcrypt functions 
 // bcrypt.hash("bacon", null, null, function(err, hash) {
