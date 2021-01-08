@@ -31,7 +31,7 @@ app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt)})
 
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt)})
 
-app.get('/profile/:id', (req, res) => { profile.handleprofileGet(req, res, db)})
+app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db)})
 
 app.put('/image', (req, res) => { profile.handleImage(req, res, db)})
 
